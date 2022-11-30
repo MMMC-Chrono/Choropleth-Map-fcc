@@ -43,9 +43,10 @@ function collectedData(error, education, county) {
                           e > 39 && e <= 48 ? colorLtoH[4] : 
                           e > 48 && e <= 57 ? colorLtoH[5] : 
                           e > 57 && e <= 66 ? colorLtoH[6] : colorLtoH[7]
-                          //3, 12, 21, 30, 39, 48, 57, 66, 75
                         })
-                        //console.log(education)
+                        .attr('data-fips', (education) => education.fips)
+                        .attr('data-education', (education) => education.bachelorsOrHigher)
+
     const minMax = d3.extent(education.map(e=>e.bachelorsOrHigher/100));
     const xScaleL = d3.scaleLinear()
                       .domain(minMax)
@@ -65,8 +66,21 @@ function collectedData(error, education, county) {
     svg.append('g')
        .attr('transform', 'translate(0,50)')
        .call(xAxisL)
-
+    
+    const minMaxL = increment(minMax)
+    minMaxL.shift()
+    
     const legend = svg.append('g')
                       .attr('id', 'legend')
+                      .selectAll('rect')
+                      .data(minMaxL)
+                      .enter()
+                      .append('rect')
+                      .attr('x', (minMaxL) => xScaleL(minMaxL)-31.5)
+                      .attr('y', 35)
+                      .attr('width', 32)
+                      .attr('height', 15)
+                      .attr('fill', (minMaxL, i) => colorLtoH[i])
+                      
 
 }
