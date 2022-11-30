@@ -1,0 +1,41 @@
+* {
+    box-sizing: border-box;
+}
+#main {
+    display: flex;
+    position: relative;
+    justify-content: center;
+    width: 1200px;
+    height: 700px;
+    padding: 0;
+    margin: 0;
+}
+#title {
+    position: absolute;
+    top: -10px;
+}
+#description {
+    position: absolute;
+    top: 50px;
+}
+svg {
+    position: absolute;
+    top: 70px;
+}
+#tooltip {
+    position: absolute;
+    width: 170px;
+    height: 75px;
+    background: whitesmoke;
+    color: maroon;
+    padding: 10px;
+    text-align: center;
+    border: 1px solid brown;
+    border-radius: 5px;
+    box-shadow: 2px 3px 3px 0px black;
+}
+.county:hover {
+    filter: drop-shadow(2px 0px 3px black);
+    stroke: brown;
+    stroke-width: 2px;
+}
