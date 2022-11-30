@@ -18,6 +18,13 @@ function collectedData(error, education, county) {
                             .attr('id', 'description')
                             .text("Percentage of adults age 25 and older with a bachelor's degree or higher (2010-2014)")
 
+    const tooltip = d3.select('body')
+                      .append('div')
+                      .attr('id', 'tooltip')
+                      .style('top', 0)
+                      .style('left', 0)
+                      .style('opacity', 0)
+
     const w = 960;
     const h = 600;
     const p = 30;
@@ -36,7 +43,7 @@ function collectedData(error, education, county) {
                         .data(education)
                         .attr('fill', (education)=> {
                           const e = education.bachelorsOrHigher
-                          return e > 3 && e <= 12 ? colorLtoH[0] :
+                          return e > 2 && e <= 12 ? colorLtoH[0] :
                           e > 12 && e <= 21 ? colorLtoH[1] :
                           e > 21 && e <= 30 ? colorLtoH[2] :
                           e > 30 && e <= 39 ? colorLtoH[3] : 
@@ -46,6 +53,16 @@ function collectedData(error, education, county) {
                         })
                         .attr('data-fips', (education) => education.fips)
                         .attr('data-education', (education) => education.bachelorsOrHigher)
+                        .on('mouseover', (education) => {
+                          tooltip.style('opacity', 1)
+                                 .style('top', (d3.event.pageY + 20) +'px')
+                                 .style('left', (d3.event.pageX + 20) + 'px')
+                                 .html(education.area_name + ', ' + education.state + '<br/>' + education.bachelorsOrHigher + '%')
+                          document.querySelector('#tooltip').setAttribute('data-education', education.bachelorsOrHigher)
+                        })
+                        .on('mouseout', (education) => {
+                          tooltip.style('opacity', 0)
+                        })
 
     const minMax = d3.extent(education.map(e=>e.bachelorsOrHigher/100));
     const xScaleL = d3.scaleLinear()
@@ -69,7 +86,7 @@ function collectedData(error, education, county) {
     
     const minMaxL = increment(minMax)
     minMaxL.shift()
-    
+
     const legend = svg.append('g')
                       .attr('id', 'legend')
                       .selectAll('rect')
